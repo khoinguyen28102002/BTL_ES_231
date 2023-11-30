@@ -6,6 +6,7 @@
 #include <driver/uart.h>
 #include <driver/adc.h>
 #include <string.h>
+
 #define DHT_PIN GPIO_NUM_1  // Replace with the actual GPIO pin connected to DHT11
 #define COM_PORT UART_NUM_2 // Replace with the actual UART port you are using
 #define TXD_PIN GPIO_NUM_17 // Replace with the actual TXD pin connected to the gateway
@@ -171,24 +172,23 @@ static void light_sensor_task(void *pvParameter)
 static void fan_task(void *pvParameter)
 {
     gpio_set_direction(FAN_PIN, GPIO_MODE_OUTPUT);
-    uint8_t data;
+    char *data = (char *)malloc(2);
 
     while (1)
     {
-        if (uart_read_bytes(COM_PORT, &fan_status, 1, 100 / portTICK_RATE_MS) > 0)
+        int len = uart_read_bytes(COM_PORT, data, 1, 100 / portTICK_PERIOD_MS); // Leave space for the null terminator
+        if (len > 0)
         {
-            printf("Received fan status: %d\n", fan_status);
-
-            if (data == 3)
+            data[len] = '\0';
+            if (strcmp(data, "3") == 0)
             {
                 gpio_set_level(FAN_PIN, 0);
             }
-            else if (data == 4)
+            else if (strcmp(data, "4") == 0)
             {
                 gpio_set_level(FAN_PIN, 1);
             }
-
-            vTaskDelay(2000 / portTICK_PERIOD_MS); // Delay for 2 seconds
+            vTaskDelay(100 / portTICK_PERIOD_MS);
         }
     }
 }
