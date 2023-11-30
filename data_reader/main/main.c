@@ -4,12 +4,13 @@
 #include <driver/gpio.h>
 #include <freertos/timers.h>
 #include <driver/uart.h>
+#include <driver/adc.h>
 #include <string.h>
 #define DHT_PIN GPIO_NUM_1   // Replace with the actual GPIO pin connected to DHT11
 #define COM_PORT UART_NUM_2  // Replace with the actual UART port you are using
 #define TXD_PIN GPIO_NUM_17  // Replace with the actual TXD pin connected to the gateway
 #define RXD_PIN GPIO_NUM_16  // Replace with the actual RXD pin connected to the gateway
-
+#define LIGHT_SENSOR_PIN ADC1_CHANNEL_0
 SemaphoreHandle_t xSemaphore;
 
 static int dht_read_data(uint8_t *humidity, uint8_t *temperature) {
@@ -52,7 +53,8 @@ static int dht_read_data(uint8_t *humidity, uint8_t *temperature) {
 
     // Wait for the sensor to pull the line low again
     timeout = 0;
-    while (gpio_get_level(DHT_PIN) == 1) {
+    while (gpio_get_level(DHT_PIN) == 1) 
+    {
         vTaskDelay(1 / portTICK_PERIOD_MS);
         timeout++;
         if (timeout > 80) {
@@ -115,13 +117,29 @@ static void dht_task(void *pvParameter) {
         if (dht_read_data(&humidity, &temperature) == 0) {
             // Format the data as a string
             char dht_data[50];
-            snprintf(dht_data, sizeof(dht_data), "DHT Data: Humidity=%u%%, Temperature=%u°C\n", humidity, temperature);
-
+            snprintf(dht_data, sizeof(dht_data), "!1:T:%u#", temperature);  // Temperature frame
+            snprintf(dht_data, sizeof(dht_data), "!1:H:%u#", humidity);  // Humidity frame
             // Send data to gateway via UART
             uart_send(dht_data);
-        } else {
+        } 
+        else 
+        {
             printf("Failed to read DHT data\n");
         }
+        
+        xSemaphoreGive(xSemaphore);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);  // Delay for 2 seconds
+    }
+}
+
+static void light_sensor_task(void *pvParameter) {
+    while (1) {
+        xSemaphoreTake(xSemaphore, portMAX_DELAY);
+        uint16_t light_value = adc1_get_raw(LIGHT_SENSOR_PIN);
+    
+        char light_data[50];
+        snprintf(light_data, sizeof(light_data), "!1:L:%u#!", light_value);  // Light sensor frame
+        uart_send(light_data);
         
         xSemaphoreGive(xSemaphore);
         vTaskDelay(2000 / portTICK_PERIOD_MS);  // Delay for 2 seconds
@@ -151,5 +169,6 @@ void app_main() {
     uart_driver_install(COM_PORT, 256, 0, 0, NULL, 0);
 
     // Create task for DHT sensor
-    xTaskCreate(&dht_task, "dht_task", 2048, NULL, 5, NULL);
+    xTaskCreate(&dht_task, "dht_task", 2048, NULL, 3, NULL);
+    xTaskCreate(&light_sensor_task, "light_sensor_task", 2048, NULL, 3, NULL);
 }
