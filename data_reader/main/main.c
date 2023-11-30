@@ -138,7 +138,7 @@ static void light_sensor_task(void *pvParameter) {
         uint16_t light_value = adc1_get_raw(LIGHT_SENSOR_PIN);
     
         char light_data[50];
-        snprintf(light_data, sizeof(light_data), "!1:L:%u#!", light_value);  // Light sensor frame
+        snprintf(light_data, sizeof(light_data), "!1:L:%u#", light_value);  // Light sensor frame
         uart_send(light_data);
         
         xSemaphoreGive(xSemaphore);
