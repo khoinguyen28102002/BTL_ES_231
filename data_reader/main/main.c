@@ -14,8 +14,44 @@
 #define LIGHT_SENSOR_PIN ADC1_CHANNEL_0
 #define FAN_PIN GPIO_NUM_2 // Replace with the actual GPIO pin connected to the fan
 
-SemaphoreHandle_t xSemaphore;
+#define LED_PIN GPIO_NUM_18             /* Pin connect to led*/
+static const int RX_BUF_SIZE = 1024;    /*rx buffer size*/
+/* function to config the led*/
+void config_led(void)
+{
+    esp_rom_gpio_pad_select_gpio(LED_PIN); /*enable gpio function for pin*/
+    gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT); /*set direction for gpio pin*/
+}
 
+/* Control led task*/
+static void control_led_task(void *arg)
+{
+    // static const char *RX_TASK_TAG = "RX_TASK";
+    // esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
+    char* data = (char*) malloc(RX_BUF_SIZE+1); 
+    while (1) {
+        const int rxBytes = uart_read_bytes(UART_NUM_2, data, RX_BUF_SIZE, 1000 / portTICK_PERIOD_MS);
+        if (rxBytes > 0) {
+            data[rxBytes] = 0; /*add the string terminator charater*/
+            // ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
+            // ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
+        }
+        printf("value of input: %s\n", data);
+        if(strcmp(data, "1") == 0)
+        {
+            /*Turn of the light*/
+            gpio_set_level(LED_PIN, 1);
+        }
+        else if(strcmp(data, "2") == 0)
+        {
+            /*Turn on the light*/
+            gpio_set_level(LED_PIN, 0);
+        }
+    }
+    free(data);
+}
+
+SemaphoreHandle_t xSemaphore;
 static int dht_read_data(uint8_t *humidity, uint8_t *temperature)
 {
     // Function to read data from DHT11 sensor
@@ -193,8 +229,26 @@ static void fan_task(void *pvParameter)
     }
 }
 
+void uart_config(void) {
+    const uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_DEFAULT,
+    };
+    // We won't use a buffer for sending data.
+    uart_driver_install(UART_NUM_2, RX_BUF_SIZE * 2, 0, 0, NULL, 0);
+    uart_param_config(UART_NUM_2, &uart_config);
+    uart_set_pin(UART_NUM_2, TXD_PIN, RXD_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+}
+
 void app_main()
 {
+    config_led(); /*Config the led*/
+    uart_config();  /* Config UART*/
+
     xSemaphore = xSemaphoreCreateMutex();
 
     // Configure DHT_PIN as an input initially
@@ -219,4 +273,8 @@ void app_main()
     xTaskCreate(&dht_task, "dht_task", 2048, NULL, 3, NULL);
     xTaskCreate(&light_sensor_task, "light_sensor_task", 2048, NULL, 3, NULL);
     xTaskCreate(&fan_task, "fan_task", 2048, NULL, 3, NULL);
+
+
+    /* Create task for control the led*/
+    xTaskCreate(control_led_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
 }

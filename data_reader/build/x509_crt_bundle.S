@@ -1,4 +1,4 @@
-/* * Data converted from C:/Users/admin/Desktop/esp/data_reader/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

@@ -4,19 +4,19 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "C:/Users/admin/esp/esp-idf/components/bootloader/subproject"
-  "C:/Users/admin/Desktop/esp/data_reader/build/bootloader"
-  "C:/Users/admin/Desktop/esp/data_reader/build/bootloader-prefix"
-  "C:/Users/admin/Desktop/esp/data_reader/build/bootloader-prefix/tmp"
-  "C:/Users/admin/Desktop/esp/data_reader/build/bootloader-prefix/src/bootloader-stamp"
-  "C:/Users/admin/Desktop/esp/data_reader/build/bootloader-prefix/src"
-  "C:/Users/admin/Desktop/esp/data_reader/build/bootloader-prefix/src/bootloader-stamp"
+  "D:/Embedded_Programming/ESP/esp-idf_extension/esp/esp-idf/components/bootloader/subproject"
+  "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader"
+  "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader-prefix"
+  "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader-prefix/tmp"
+  "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader-prefix/src/bootloader-stamp"
+  "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader-prefix/src"
+  "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "C:/Users/admin/Desktop/esp/data_reader/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "C:/Users/admin/Desktop/esp/data_reader/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()
