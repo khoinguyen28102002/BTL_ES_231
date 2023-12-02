@@ -1,4 +1,5 @@
-**HỆ THỐNG NHÀ THÔNG MINH ĐIỀU KHIỂN THÔNG QUA THIẾT BỊ**<br>
+**HỆ THỐNG NHÀ THÔNG MINH ĐIỀU KHIỂN THÔNG QUA THIẾT BỊ**
+<br>
 **_Thành viên tham gia_**
 1. Nguyễn Khôi Nguyên
 2. Nguyễn Huy Hoàng
@@ -22,7 +23,7 @@
 6. Led 1W CW ánh sáng trắng
 7. Động cơ RF-300CA
 8. Mạch chuyển đối USB to UART<br>
-**_Lập trình_**
-_Sử dụng Visual Studio Code lập trình_
-_Sử dụng thư viện ESP-IDF và ngôn ngữ C lập trình cho ESP32_
-_Sử dụng ngôn ngữ Python lập trình cho Gateway_
+**_Lập trình_**<br>
+_Sử dụng Visual Studio Code lập trình_ <br>
+_Sử dụng thư viện ESP-IDF và ngôn ngữ C lập trình cho ESP32_ <br>
+_Sử dụng ngôn ngữ Python lập trình cho Gateway_ <br>
