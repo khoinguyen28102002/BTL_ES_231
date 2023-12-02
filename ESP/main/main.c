@@ -7,57 +7,17 @@
 #include <driver/adc.h>
 #include <string.h>
 
-#define DHT_PIN GPIO_NUM_14  // Replace with the actual GPIO pin connected to DHT11
-#define COM_PORT UART_NUM_0 // Replace with the actual UART port you are using
+#define DHT_PIN GPIO_NUM_14
+#define COM_PORT UART_NUM_2 // Replace with the actual UART port you are using
 #define TXD_PIN GPIO_NUM_17 // Replace with the actual TXD pin connected to the gateway
 #define RXD_PIN GPIO_NUM_16 // Replace with the actual RXD pin connected to the gateway
-<<<<<<< HEAD:ESP/main/main.c
 #define LIGHT_SENSOR_PIN GPIO_NUM_4
 #define FAN_PIN GPIO_NUM_19 // Replace with the actual GPIO pin connected to the fan
 #define LED_PIN GPIO_NUM_18
 SemaphoreHandle_t xSemaphore;
 static const int RX_BUF_SIZE = 1024; 
-=======
-#define LIGHT_SENSOR_PIN ADC1_CHANNEL_0
-#define FAN_PIN GPIO_NUM_2 // Replace with the actual GPIO pin connected to the fan
 
-#define LED_PIN GPIO_NUM_18             /* Pin connect to led*/
-static const int RX_BUF_SIZE = 1024;    /*rx buffer size*/
-/* function to config the led*/
-void config_led(void)
-{
-    esp_rom_gpio_pad_select_gpio(LED_PIN); /*enable gpio function for pin*/
-    gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT); /*set direction for gpio pin*/
-}
->>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/main/main.c
 
-/* Control led task*/
-static void control_led_task(void *arg)
-{
-    // static const char *RX_TASK_TAG = "RX_TASK";
-    // esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
-    char* data = (char*) malloc(RX_BUF_SIZE+1); 
-    while (1) {
-        const int rxBytes = uart_read_bytes(UART_NUM_2, data, RX_BUF_SIZE, 1000 / portTICK_PERIOD_MS);
-        if (rxBytes > 0) {
-            data[rxBytes] = 0; /*add the string terminator charater*/
-            // ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
-            // ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
-        }
-        printf("value of input: %s\n", data);
-        if(strcmp(data, "1") == 0)
-        {
-            /*Turn of the light*/
-            gpio_set_level(LED_PIN, 1);
-        }
-        else if(strcmp(data, "2") == 0)
-        {
-            /*Turn on the light*/
-            gpio_set_level(LED_PIN, 0);
-        }
-    }
-    free(data);
-}
 
 SemaphoreHandle_t xSemaphore;
 static int dht_read_data(uint8_t *humidity, uint8_t *temperature)
@@ -70,13 +30,11 @@ static int dht_read_data(uint8_t *humidity, uint8_t *temperature)
 
     // Start signal
     esp_rom_gpio_pad_select_gpio(DHT_PIN);
-    // gpio_set_direction(DHT_PIN, GPIO_MODE_OUTPUT);
-    // gpio_set_level(DHT_PIN, 0);
-    // ets_delay_us(20 * 1000);  // 20ms
-    // vTaskDelay(20 / portTICK_PERIOD_MS);
-    // gpio_set_level(DHT_PIN, 1);
-    // vTaskDelay(20 / portTICK_PERIOD_MS);
-    // ets_delay_us(30);  // Wait for DHT response
+    gpio_set_direction(DHT_PIN, GPIO_MODE_OUTPUT);
+    gpio_set_level(DHT_PIN, 0);
+    vTaskDelay(20 / portTICK_PERIOD_MS);
+    gpio_set_level(DHT_PIN, 1);
+    vTaskDelay(20 / portTICK_PERIOD_MS);
     
     // DHT response
     gpio_set_direction(DHT_PIN, GPIO_MODE_INPUT);
@@ -170,7 +128,6 @@ static int dht_read_data(uint8_t *humidity, uint8_t *temperature)
 static void uart_send(const char *data)
 {
     // Function to send data over UART
-    // printf("%s\n", data);
     uart_write_bytes(COM_PORT, data, strlen(data));
 }
 
@@ -209,7 +166,6 @@ static void light_sensor_task(void *pvParameter)
 
         char light_data[50];
         snprintf(light_data, sizeof(light_data), "!1:L:%u#", light_value); // Light sensor frame
-        // printf(light)
         uart_send(light_data);
 
         xSemaphoreGive(xSemaphore);
@@ -218,72 +174,18 @@ static void light_sensor_task(void *pvParameter)
     vTaskDelete(NULL);
 }
 
-// static void fan_task(void *pvParameter)
-// {
-//     // gpio_set_direction(FAN_PIN, GPIO_MODE_OUTPUT);
-//     // gpio_set_level(FAN_PIN, 1);
-//     char *data = (char *)malloc(2);
-
-//     while (1)
-//     {
-//         int len = uart_read_bytes(COM_PORT, data, 1, 100 / portTICK_PERIOD_MS); // Leave space for the null terminator
-//         if (len > 0)
-//         {
-//             if (data == '3')
-//             {
-//                 gpio_set_level(FAN_PIN, 0);
-//             }
-//             else if (data == '4')
-//             {
-//                 gpio_set_level(FAN_PIN, 1);
-//             }
-//             vTaskDelay(100 / portTICK_PERIOD_MS);
-//         }
-//     }
-// }
-/* Control led task*/
-static void control_fan_task(void *arg)
+/* Control device task*/
+static void control_device_task(void *arg)
 {
-    // static const char *RX_TASK_TAG = "RX_TASK";
-    // esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
     char* data = (char*) malloc(RX_BUF_SIZE+1); 
     while (1) {
-        const int rxBytes = uart_read_bytes(COM_PORT, data, RX_BUF_SIZE, 1000 / portTICK_PERIOD_MS);
+        const int rxBytes = uart_read_bytes(UART_NUM_2, data, RX_BUF_SIZE, 1000 / portTICK_PERIOD_MS);
         if (rxBytes > 0) {
             data[rxBytes] = 0; /*add the string terminator charater*/
-            // ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
-            // ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
         }
-        printf("value of input: %s\n", data);
-        if(strcmp(data, "3") == 0)
-        {
-            /*Turn off the light*/
-            gpio_set_level(FAN_PIN, 0);
-        }
-        else if(strcmp(data, "4") == 0)
-        {
-            /*Turn on the light*/
-            gpio_set_level(FAN_PIN, 1);
-        }
-    }
-    free(data);
-}
-static void control_led_task(void *arg)
-{
-    // static const char *RX_TASK_TAG = "RX_TASK";
-    // esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
-    char* data = (char*) malloc(RX_BUF_SIZE+1); 
-    while (1) {
-        const int rxBytes = uart_read_bytes(COM_PORT, data, RX_BUF_SIZE, 1000 / portTICK_PERIOD_MS);
-        if (rxBytes > 0) {
-            data[rxBytes] = 0; /*add the string terminator charater*/
-            // ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
-            // ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
-        }
-        // printf("value of input: %s\n", data);
         if(strcmp(data, "1") == 0)
         {
-            /*Turn off the light*/
+            /*Turn of the light*/
             gpio_set_level(LED_PIN, 0);
         }
         else if(strcmp(data, "2") == 0)
@@ -292,7 +194,7 @@ static void control_led_task(void *arg)
             gpio_set_level(LED_PIN, 1);
         }else if(strcmp(data, "3") == 0)
         {
-            /*Turn off the light*/
+            /*Turn of the light*/
             gpio_set_level(FAN_PIN, 0);
         }
         else if(strcmp(data, "4") == 0)
@@ -302,10 +204,7 @@ static void control_led_task(void *arg)
         }
     }
     free(data);
-    vTaskDelete(NULL);
 }
-<<<<<<< HEAD:ESP/main/main.c
-=======
 
 void uart_config(void) {
     const uart_config_t uart_config = {
@@ -322,12 +221,8 @@ void uart_config(void) {
     uart_set_pin(UART_NUM_2, TXD_PIN, RXD_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 }
 
->>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/main/main.c
 void app_main()
 {
-    config_led(); /*Config the led*/
-    uart_config();  /* Config UART*/
-
     xSemaphore = xSemaphoreCreateMutex();
 
     // Configure DHT_PIN as an input initially
@@ -353,18 +248,7 @@ void app_main()
     uart_driver_install(COM_PORT, 256, 0, 0, NULL, 0);
 
     // // Create task for DHT sensor
-    // xTaskCreate(&dht_task, "dht_task", 2048, NULL, 3, NULL);
-    
-    // xTaskCreate(control_fan_task, "fan_task", 2048, NULL, configMAX_PRIORITIES-2, NULL);
-    xTaskCreate(control_led_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
+    xTaskCreate(control_device_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
     vTaskDelay(2000 / portTICK_PERIOD_MS);
     xTaskCreate(&light_sensor_task, "light_sensor_task", 2048, NULL, 3, NULL);
-<<<<<<< HEAD:ESP/main/main.c
-=======
-    xTaskCreate(&fan_task, "fan_task", 2048, NULL, 3, NULL);
-
-
-    /* Create task for control the led*/
-    xTaskCreate(control_led_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
->>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/main/main.c
 }
