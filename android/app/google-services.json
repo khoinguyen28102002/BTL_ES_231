@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1062158820259",
+    "project_id": "hsmarthome-5df28",
+    "storage_bucket": "hsmarthome-5df28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062158820259:android:50106d4f72c87ec2e43016",
+        "android_client_info": {
+          "package_name": "com.example.hsmarthome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062158820259-jrl7upick8e43ktbvdt8av65lgdt5ka2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hsmarthome",
+            "certificate_hash": "7dba0be50b1b9fdd9e2aebfab2186f79160e7b0b"
+          }
+        },
+        {
+          "client_id": "1062158820259-1apobjd5e23iv89i6i6245qsj0ji2kel.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsR_6Ym65lJDG1K_xgoZbPKDmw1L5yruc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062158820259-1apobjd5e23iv89i6i6245qsj0ji2kel.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
