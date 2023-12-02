@@ -1,14 +1,14 @@
-**HỆ THỐNG NHÀ THÔNG MINH ĐIỀU KHIỂN THÔNG QUA THIẾT BỊ**
+**HỆ THỐNG NHÀ THÔNG MINH ĐIỀU KHIỂN THÔNG QUA THIẾT BỊ**<br>
 **_Thành viên tham gia_**
 1. Nguyễn Khôi Nguyên
 2. Nguyễn Huy Hoàng
 3. Trần Đoàn Đức Huy
 4. Nguyễn Phan Anh Tuấn
 5. Nguyễn Kim Quỳnh
-6. Võ Nguyễn Phương Long Vĩnh
+6. Võ Nguyễn Phương Long Vĩnh<br>
 **_Chức năng hệ thống_**
 1. Đọc giá trị cường độ ánh sáng và hiển thị lên ứng dụng trên thiết bị
-2. Điều khiển đèn, quạt thông qua ứng dụng trên thiết bị
+2. Điều khiển đèn, quạt thông qua ứng dụng trên thiết bị<br>
 **_Sơ đồ thiết kế tổng quan hệ thống_**
 ![system_design](https://github.com/khoinguyen28102002/BTL_ES_231/assets/114055698/7400a392-5f25-4fac-a3b7-7e897f1eae48)
 **_Sơ đồ kết nối hệ thống_**
@@ -21,7 +21,7 @@
 5. Module 2 Relay 5V Kích mức Cao/Thấp
 6. Led 1W CW ánh sáng trắng
 7. Động cơ RF-300CA
-8. Mạch chuyển đối USB to UART
+8. Mạch chuyển đối USB to UART<br>
 **_Lập trình_**
 _Sử dụng Visual Studio Code lập trình_
 _Sử dụng thư viện ESP-IDF và ngôn ngữ C lập trình cho ESP32_
