@@ -1,4 +1,8 @@
+<<<<<<< HEAD:ESP/build/esp-idf/esp_hw_support/cmake_install.cmake
 # Install script for directory: C:/Espressif/esp/esp-idf/esp-idf/components/esp_hw_support
+=======
+# Install script for directory: D:/Embedded_Programming/ESP/esp-idf_extension/esp/esp-idf/components/esp_system
+>>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/build/esp-idf/esp_system/cmake_install.cmake
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,11 +38,19 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
+<<<<<<< HEAD:ESP/build/esp-idf/esp_hw_support/cmake_install.cmake
   set(CMAKE_OBJDUMP "C:/Espressif/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-objdump.exe")
+=======
+  set(CMAKE_OBJDUMP "D:/Embedded_Programming/ESP/esp-idf_extension/.espressif/tools/xtensa-esp32-elf/esp-12.2.0_20230208/xtensa-esp32-elf/bin/xtensa-esp32-elf-objdump.exe")
+>>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/build/esp-idf/esp_system/cmake_install.cmake
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+<<<<<<< HEAD:ESP/build/esp-idf/esp_hw_support/cmake_install.cmake
   include("D:/HK231/HTN/BTL/Code/Code/sample_project/build/esp-idf/esp_hw_support/port/esp32/cmake_install.cmake")
+=======
+  include("D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/esp-idf/esp_system/port/cmake_install.cmake")
+>>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/build/esp-idf/esp_system/cmake_install.cmake
 endif()
 

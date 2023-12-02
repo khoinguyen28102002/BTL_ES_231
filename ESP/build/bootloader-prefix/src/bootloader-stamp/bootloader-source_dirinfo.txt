@@ -4,6 +4,10 @@
 
 method=source_dir
 command=
+<<<<<<< HEAD:ESP/build/bootloader-prefix/src/bootloader-stamp/bootloader-source_dirinfo.txt
 source_dir=C:/Espressif/esp/esp-idf/esp-idf/components/bootloader/subproject
+=======
+source_dir=D:/Embedded_Programming/ESP/esp-idf_extension/esp/esp-idf/components/bootloader/subproject
+>>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/build/bootloader-prefix/src/bootloader-stamp/bootloader-source_dirinfo.txt
 work_dir=
 

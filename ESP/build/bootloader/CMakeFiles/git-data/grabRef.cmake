@@ -15,10 +15,17 @@
 
 set(HEAD_HASH)
 
+<<<<<<< HEAD:ESP/build/bootloader/CMakeFiles/git-data/grabRef.cmake
 file(READ "D:/HK231/HTN/BTL/Code/Code/sample_project/build/bootloader/CMakeFiles/git-data/HEAD" HEAD_CONTENTS LIMIT 1024)
 
 string(STRIP "${HEAD_CONTENTS}" HEAD_CONTENTS)
 set(GIT_DIR "C:/Espressif/esp/esp-idf/esp-idf/.git")
+=======
+file(READ "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader/CMakeFiles/git-data/HEAD" HEAD_CONTENTS LIMIT 1024)
+
+string(STRIP "${HEAD_CONTENTS}" HEAD_CONTENTS)
+set(GIT_DIR "D:/Embedded_Programming/ESP/esp-idf_extension/esp/esp-idf/.git")
+>>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/build/bootloader/CMakeFiles/git-data/grabRef.cmake
 # handle git-worktree
 if(EXISTS "${GIT_DIR}/commondir")
 	file(READ "${GIT_DIR}/commondir" GIT_DIR_NEW LIMIT 1024)
@@ -34,17 +41,31 @@ if(HEAD_CONTENTS MATCHES "ref")
 	# named branch
 	string(REPLACE "ref: " "" HEAD_REF "${HEAD_CONTENTS}")
 	if(EXISTS "${GIT_DIR}/${HEAD_REF}")
+<<<<<<< HEAD:ESP/build/bootloader/CMakeFiles/git-data/grabRef.cmake
 		configure_file("${GIT_DIR}/${HEAD_REF}" "D:/HK231/HTN/BTL/Code/Code/sample_project/build/bootloader/CMakeFiles/git-data/head-ref" COPYONLY)
 	elseif(EXISTS "${GIT_DIR}/logs/${HEAD_REF}")
 		configure_file("${GIT_DIR}/logs/${HEAD_REF}" "D:/HK231/HTN/BTL/Code/Code/sample_project/build/bootloader/CMakeFiles/git-data/head-ref" COPYONLY)
+=======
+		configure_file("${GIT_DIR}/${HEAD_REF}" "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader/CMakeFiles/git-data/head-ref" COPYONLY)
+	elseif(EXISTS "${GIT_DIR}/logs/${HEAD_REF}")
+		configure_file("${GIT_DIR}/logs/${HEAD_REF}" "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader/CMakeFiles/git-data/head-ref" COPYONLY)
+>>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/build/bootloader/CMakeFiles/git-data/grabRef.cmake
 		set(HEAD_HASH "${HEAD_REF}")
 	endif()
 else()
 	# detached HEAD
+<<<<<<< HEAD:ESP/build/bootloader/CMakeFiles/git-data/grabRef.cmake
 	configure_file("${GIT_DIR}/HEAD" "D:/HK231/HTN/BTL/Code/Code/sample_project/build/bootloader/CMakeFiles/git-data/head-ref" COPYONLY)
 endif()
 
 if(NOT HEAD_HASH)
 	file(READ "D:/HK231/HTN/BTL/Code/Code/sample_project/build/bootloader/CMakeFiles/git-data/head-ref" HEAD_HASH LIMIT 1024)
+=======
+	configure_file("${GIT_DIR}/HEAD" "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader/CMakeFiles/git-data/head-ref" COPYONLY)
+endif()
+
+if(NOT HEAD_HASH)
+	file(READ "D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/bootloader/CMakeFiles/git-data/head-ref" HEAD_HASH LIMIT 1024)
+>>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/build/bootloader/CMakeFiles/git-data/grabRef.cmake
 	string(STRIP "${HEAD_HASH}" HEAD_HASH)
 endif()

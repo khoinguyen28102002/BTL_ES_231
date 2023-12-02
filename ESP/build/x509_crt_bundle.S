@@ -1,4 +1,8 @@
+<<<<<<< HEAD:ESP/build/x509_crt_bundle.S
 /* * Data converted from D:/HK231/HTN/BTL/Code/Code/sample_project/build/esp-idf/mbedtls/x509_crt_bundle
+=======
+/* * Data converted from D:/UniversityProject/embedded_system_subject_assignment/BTL_ES_231/data_reader/build/esp-idf/mbedtls/x509_crt_bundle
+>>>>>>> 2561197efd2b775a1f31193203379d7ec7822d8f:data_reader/build/x509_crt_bundle.S
  */
 .data
 .section .rodata.embedded
