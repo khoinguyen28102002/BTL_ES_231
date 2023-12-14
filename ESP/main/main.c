@@ -6,6 +6,7 @@
 #include <driver/uart.h>
 #include <driver/adc.h>
 #include <string.h>
+#include <stdio.h>
 
 #define DHT_PIN GPIO_NUM_14
 #define COM_PORT UART_NUM_2 // Replace with the actual UART port you are using
@@ -14,6 +15,7 @@
 #define LIGHT_SENSOR_PIN GPIO_NUM_4
 #define FAN_PIN GPIO_NUM_19 // Replace with the actual GPIO pin connected to the fan
 #define LED_PIN GPIO_NUM_18
+#define PIR_PIN  GPIO_NUM_23
 SemaphoreHandle_t xSemaphore;
 static const int RX_BUF_SIZE = 1024; 
 
@@ -174,7 +176,55 @@ static void light_sensor_task(void *pvParameter)
     vTaskDelete(NULL);
 }
 
+
+void ControlLedByPIR(void* parameter)
+{
+    /************************************************
+    CONFIG PIR
+    ************************************************/
+    /*Enable GPIO function for pin*/
+    esp_rom_gpio_pad_select_gpio(PIR_PIN);    
+    /*Set pin as input*/       
+    gpio_set_direction(PIR_PIN, GPIO_MODE_INPUT);  
+    /*Enable pull up resistor for gpio input pin*/
+    gpio_set_pull_mode(PIR_PIN, GPIO_PULLDOWN_ONLY);
+    /************************************************
+    CONFIG LED
+    ************************************************/
+    /*Enable GPIO function for pin*/
+    esp_rom_gpio_pad_select_gpio(LED_PIN);    
+    /*Set pin as input*/       
+    gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);  
+
+    gpio_set_level(LED_PIN, 1); /*Turn off the led*/
+    int PIR_level = 0;
+    while(1)
+    {
+        PIR_level = gpio_get_level(PIR_PIN);
+        printf("value of input: %d\n", PIR_level);
+        if(isLightNow == 0){
+            if (PIR_level == 1){
+                /*PIR is pressed -> turn on the led*/
+                gpio_set_level(LED_PIN, 0); /*Turn on the led*/
+                flagLight = 1;
+                /*send data to gateway*/
+                //TODO
+            }
+            else
+            {
+                /*PIR is not pressed -> turn off the led*/
+                gpio_set_level(LED_PIN, 1);
+                flagLight = 0;
+                /*send data to gateway*/
+                //TODO
+            }
+        }
+    }
+}
+
 /* Control device task*/
+int isLightNow = 0;
+int flagLight = 0;
 static void control_device_task(void *arg)
 {
     char* data = (char*) malloc(RX_BUF_SIZE+1); 
@@ -187,11 +237,15 @@ static void control_device_task(void *arg)
         {
             /*Turn of the light*/
             gpio_set_level(LED_PIN, 0);
+            isLightNow = 0;
+            flagLight = 0;
         }
         else if(strcmp(data, "2") == 0)
         {
             /*Turn on the light*/
             gpio_set_level(LED_PIN, 1);
+            isLightNow = 1;
+            flagLight = 1;
         }else if(strcmp(data, "3") == 0)
         {
             /*Turn of the light*/
@@ -251,4 +305,5 @@ void app_main()
     xTaskCreate(control_device_task, "uart_rx_task", 1024*2, NULL, configMAX_PRIORITIES, NULL);
     vTaskDelay(2000 / portTICK_PERIOD_MS);
     xTaskCreate(&light_sensor_task, "light_sensor_task", 2048, NULL, 3, NULL);
+    xTaskCreate(ControlLedByPIR, "ControlLedByPIR", 2048, NULL, configMAX_PRIORITIES - 1, NULL);
 }
