@@ -196,7 +196,7 @@ void ControlLedByPIR(void* parameter)
     /*Set pin as input*/       
     gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);  
 
-    gpio_set_level(LED_PIN, 1); /*Turn off the led*/
+    gpio_set_level(LED_PIN, 0); /*Turn off the led*/
     int PIR_level = 0;
     while(1)
     {
@@ -205,7 +205,7 @@ void ControlLedByPIR(void* parameter)
         if(isLightNow == 0){
             if (PIR_level == 1){
                 /*PIR is pressed -> turn on the led*/
-                gpio_set_level(LED_PIN, 0); /*Turn on the led*/
+                gpio_set_level(LED_PIN, 1); /*Turn on the led*/
                 flagLight = 1;
                 /*send data to gateway*/
                 //TODO
@@ -213,7 +213,7 @@ void ControlLedByPIR(void* parameter)
             else
             {
                 /*PIR is not pressed -> turn off the led*/
-                gpio_set_level(LED_PIN, 1);
+                gpio_set_level(LED_PIN, 0);
                 flagLight = 0;
                 /*send data to gateway*/
                 //TODO
