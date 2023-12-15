@@ -144,6 +144,8 @@ void ControlLedByPIR(void* parameter)
 }
 
 /* Control device task*/
+int isLightNow = 0;
+int flagLight = 0;
 static void control_device_task(void *arg)
 {
     char* data = (char*) malloc(RX_BUF_SIZE+1); 
