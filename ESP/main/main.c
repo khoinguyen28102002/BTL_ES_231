@@ -56,10 +56,10 @@ static void dht_task(void *pvParameter)
             uart_send(dht_data);
             // Display value read from DHT11 to LCD
             sprintf(buffer, "TEMP:%.1f*C ", temperature);
-            lcd_put_cur(0, 0); // Print temperature and humidity on the second line
+            lcd_put_cur(0, 0); 
             lcd_send_string(buffer);
             sprintf(buffer, "HUMI:%.1f%% ", humidity);
-            lcd_put_cur(1, 0); // Print temperature and humidity on the second line
+            lcd_put_cur(1, 0); 
             lcd_send_string(buffer);
         }
         else{
