@@ -53,8 +53,8 @@ static void dht_task(void *pvParameter)
             snprintf(dht_data, sizeof(dht_data), "!1:T:%.1f#", temperature); // Temperature frame
             uart_send(dht_data);
             snprintf(dht_data, sizeof(dht_data), "!1:H:%.1f#", humidity);    // Humidity frame
-            // Send data to gateway via UART
             uart_send(dht_data);
+            // Display value read from DHT11 to LCD
             sprintf(buffer, "TEMP:%.1f*C ", temperature);
             lcd_put_cur(0, 0); // Print temperature and humidity on the second line
             lcd_send_string(buffer);
@@ -65,7 +65,7 @@ static void dht_task(void *pvParameter)
         else{
             printf("Could not read data from sensor\n");
         }
-        vTaskDelay(30000 / portTICK_PERIOD_MS); 
+        vTaskDelay(30000 / portTICK_PERIOD_MS);  // Delay for 30 seconds
     }
 }
 
