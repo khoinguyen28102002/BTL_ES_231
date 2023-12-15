@@ -6,7 +6,7 @@ from gateway_pub import *
 
 AIO_FEED_IDs = ["fan-status", "light-status"]
 AIO_USERNAME = "khoinguyen3923"
-AIO_KEY = "aio_VCgt28YXuFdFbSzntJcOV9seUb6P"
+AIO_KEY = "aio_kDTR285Ke7FRGpRKnMSaXIBloavl"
 
 def connected(client):
     print("Ket noi thanh cong ...")
